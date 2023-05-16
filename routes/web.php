@@ -1,6 +1,9 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\MainPageController;
+use App\Http\Controllers\AdminController;
+use App\Http\Controllers\ContactController;
 
 /*
 |--------------------------------------------------------------------------
@@ -13,6 +16,12 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
+
+ 
+Route::resource('/', MainPageController::class);
+
+Route::prefix('admin')->group(function () {
+ 
+    Route::resource('/', AdminController::class);
+    Route::resource('contact', ContactController::class);
 });

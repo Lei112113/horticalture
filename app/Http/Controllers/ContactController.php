@@ -2,18 +2,16 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\main_page;
 use Illuminate\Http\Request;
 
-class MainPageController extends Controller
+class ContactController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        // return view("front.main_page");
-        return view("front.main_page");
+        return view('admin.contact');
     }
 
     /**
@@ -35,7 +33,7 @@ class MainPageController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(main_page $main_page)
+    public function show(string $id)
     {
         //
     }
@@ -43,7 +41,7 @@ class MainPageController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(main_page $main_page)
+    public function edit(string $id)
     {
         //
     }
@@ -51,7 +49,7 @@ class MainPageController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, main_page $main_page)
+    public function update(Request $request, string $id)
     {
         //
     }
@@ -59,7 +57,7 @@ class MainPageController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(main_page $main_page)
+    public function destroy(string $id)
     {
         //
     }
