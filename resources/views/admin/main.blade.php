@@ -1,2 +1,3 @@
-@extends('layouts.banner')
+@extends('layouts.nav')
+
   

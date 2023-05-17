@@ -3,29 +3,36 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Http\Controllers\NavController;
 
 class AdminController extends Controller
 {
+
     /**
      * Display a listing of the resource.
      */
+    protected $data = [];
+
+    public function __construct(NavController $nav)
+    {
+        foreach ($nav as $key => $value) {
+            $this->data= [$key => $value];
+        }
+    }
+
     public function index()
     {
-        $data=[
-            'website'=>'admin',
-            'navName'=>'管理選單',
-            'index'=>['index','回到管理首頁'],
-            'contact'=>['contact.index','聯絡資訊管理']
-        ];
-        return view("admin.main",$data);
+ 
+        return view("admin.contact", $this->data);
     }
+
 
     /**
      * Show the form for creating a new resource.
      */
     public function create()
     {
-        //
+        return view("admin.main");
     }
 
     /**

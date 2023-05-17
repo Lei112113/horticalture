@@ -3,23 +3,25 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Contact;
 
-class ContactController extends Controller
+class NavController extends Controller
 {
-    protected $data = [];
+    /**
+     * Display a listing of the resource.
+     */
+    public  $nav = [
+        'website' => 'admin',
+        'navName' => '管理選單',
+        'index' => ['index', '回到管理首頁'],
+        'contact' => ['contact.index', '聯絡資訊管理']
+    ];
+    
+    
 
-    public function __construct(NavController $nav)
-    {
-        foreach ($nav as $key => $value) {
-            $this->data= [$key => $value];
-        }
-    }
+
 
     public function index()
     {
-        
-        return view("admin.contact", $this->data);
     }
 
     /**
@@ -27,7 +29,7 @@ class ContactController extends Controller
      */
     public function create()
     {
-        
+        //
     }
 
     /**
@@ -35,14 +37,7 @@ class ContactController extends Controller
      */
     public function store(Request $request)
     {
-      $contact=new Contact;
-      $contact->companyName=$request->companyName;  
-      $contact->addrass=$request->addrass;  
-      $contact->telphone=$request->telphone;  
-      $contact->email=$request->email; 
-      
-      $contact->save();
-      return redirect('contact.index');
+        //
     }
 
     /**
