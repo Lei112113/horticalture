@@ -67,7 +67,7 @@
                 type: method,
                 url: "{{ $contact['send'] ?? route('contact.store') }}",
                 data: {
-                    
+
                     companyName: $('#companyName').val(),
                     addrass: $('#addrass').val(),
                     telphone: $('#telphone').val(),
@@ -76,11 +76,21 @@
                     _method: method
                 },
                 success: function(response) {
-                    console.log(response);
-                  
+                    Swal.fire({
+                        icon: 'success',
+                        title: '成功',
+                        text: '資料儲存成功'
+
+                    })
+
                 },
                 error: function(xhr) {
-                    console.log(xhr);
+                    Swal.fire({
+                        icon: 'error',
+                        title: '錯誤',
+                        text: '請確認資料格式',
+
+                    })
                 }
 
             });
