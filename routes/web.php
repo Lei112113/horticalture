@@ -22,7 +22,7 @@ Route::resource('/', MainPageController::class);
 
 Route::prefix('admin')->group(function () {
  
-    Route::resource('/', AdminController::class);
     Route::resource('contact', ContactController::class);
     Route::resource('nav', NavController::class);
+    Route::resource('/', AdminController::class);
 });
