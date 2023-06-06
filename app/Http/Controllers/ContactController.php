@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 use App\Models\Contact;
 
 class ContactController extends Controller
@@ -23,7 +24,6 @@ class ContactController extends Controller
             $id = $olddata[0]->id;
             $olddata[0]['send'] = route("contact.update", ['contact' => $id]);
             $this->data['contact'] = $olddata[0];
-           
         }
         return view("admin.contact", $this->data);
     }
@@ -40,12 +40,22 @@ class ContactController extends Controller
      */
     public function store(Request $request)
     {
+        
+        // 验证请求数据
+        $validator = Validator::make($request->all(), [
+            'name' => 'required',
+            'email' => 'required|email',
+            'telphone' => 'required',
+        ]);
+
         $contact = new Contact;
         $contact->companyName = $request->companyName;
         $contact->addrass = $request->addrass;
         $contact->telphone = $request->telphone;
         $contact->email = $request->email;
         $contact->save();
+
+     
     }
 
     /**
@@ -69,12 +79,15 @@ class ContactController extends Controller
      */
     public function update(Request $request, string $id)
     {
-
+        
         // 验证请求数据
-        $validatedData = $request->validate([
+        $validator = Validator::make($request->all(), [
             'name' => 'required',
-           
+            'email' => 'required|email',
+            'telphone' => 'required',
+            'addrass' => 'required',
         ]);
+
 
         // 更新数据库中的记录
         $contact = Contact::findOrFail($id);
@@ -82,12 +95,17 @@ class ContactController extends Controller
         $contact->addrass = $request->addrass;
         $contact->telphone = $request->telphone;
         $contact->email = $request->email;
-        // 更新其他字段
+       
+        if ($validator->fails()) {
+            $error = $validator->errors()->first();
+            return response()->json(['status' => $validator, 'error' => $validator],400);
+        }else{
+            $contact->save();
+            // 返回更新成功的响应
+            return response()->json(['message' => '資料成功儲存']);
+        }
+     
 
-        $contact->save();
-
-        // 返回更新成功的响应
-        return response()->json(['message' => 'Contact updated successfully']);
     }
 
 
