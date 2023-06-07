@@ -3,26 +3,27 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Orders;
 
-class NavController extends Controller
+class OrdersController extends NavController
 {
+    protected $data = [];
     /**
      * Display a listing of the resource.
      */
-    public  $nav = [
-        'website' => 'admin',
-        'navName' => '管理選單',
-        'index' => ['index', '回到管理首頁'],
-        'contact' => ['contact.index', '聯絡資訊管理'],
-        'orders' => ['orders.index', '商品管理']
-    ];
-    
-    
-
-
-
     public function index()
     {
+        foreach ($this->nav as $key => $value) {
+            $this->data['nav'][$key]= $value;
+        }
+        // dd($this->data);
+        $olddata = Orders::all();
+        if (isset($olddata[0])) {
+            $id = $olddata[0]->id;
+            $olddata[0]['send'] = route("contact.update", ['contact' => $id]);
+            $this->data['contact'] = $olddata[0];
+        }
+        return view("admin.contact", $this->data);
     }
 
     /**

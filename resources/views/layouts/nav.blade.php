@@ -17,6 +17,9 @@
             <li class="nav-item">
               <a class="nav-link" href="{{route($nav['contact'][0])}}">{{$nav['contact'][1]}}</a>
             </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{{route($nav['orders'][0])}}">{{$nav['orders'][1]}}</a>
+            </li>
             
                 
             
