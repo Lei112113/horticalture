@@ -85,6 +85,7 @@
 
                 },
                 error: function(xhr) {
+                    console.log(xhr);
                     Swal.fire({
                         icon: 'error',
                         title: '錯誤',

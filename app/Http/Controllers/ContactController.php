@@ -81,9 +81,9 @@ class ContactController extends Controller
         // 验证请求数据
         $validator = Validator::make($request->all(), [
             'companyName' => 'required',
+            'email' => 'required|email',
             'addrass' => 'required',
             'telphone' => 'required',
-            'email' => 'required|email',
         ]);
 
 
@@ -93,10 +93,10 @@ class ContactController extends Controller
         $contact->addrass = $request->addrass;
         $contact->telphone = $request->telphone;
         $contact->email = $request->email;
-        dump($validator->fails());
+        
         if ($validator->fails()) {
             $error = $validator->errors()->first();
-            return response()->json(['status' => 'error', 'error' => $error], 400);
+            return response()->json(['status' => false, 'error' => $error], 400);
         } else {
             $contact->save();
             // 返回更新成功的响应
