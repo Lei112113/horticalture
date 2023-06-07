@@ -12,8 +12,7 @@
     <input type="hidden" name="id" value="{{ $contact['id'] ?? '' }}" id="id">
     <div class="mb-1 ">
         <label for="companyName">公司名稱:</label>
-        <input class="w-50" type="text" name="companyName" id="companyName"
-            value=" {{ $contact['companyName'] ?? '' }}">
+        <input class="w-50" type="text" name="companyName" id="companyName" value=" {{ $contact['companyName'] ?? '' }}">
     </div>
     <div class="mb-1 ">
         <label for="addrass" style="margin-right:34px">地址:</label>
@@ -21,8 +20,7 @@
     </div>
     <div class="mb-1 ">
         <label for="telphone" style="margin-right:34px">電話:</label>
-        <input class="w-50" type="text" name="telphone" id="telphone" maxlength="10" oninput="chk()"
-            value="{{ $contact['telphone'] ?? '' }}">
+        <input class="w-50" type="text" name="telphone" id="telphone" maxlength="10" oninput="chk()" value="{{ $contact['telphone'] ?? '' }}">
     </div>
     <div class="mb-1 ">
         <label for="email">電子郵件:</label>
@@ -33,9 +31,7 @@
         <input class="btn btn-primary" type="submit" value="送出" onclick="stop(event)">
     </div>
 </form>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.4/jquery.min.js"
-    integrity="sha512-pumBsjNRGGqkPzKHndZMaAG+bir374sORyzM3uulLV14lN5LyykqNk8eEeUlUkB3U0M4FApyaHraT65ihJhDpQ=="
-    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.4/jquery.min.js" integrity="sha512-pumBsjNRGGqkPzKHndZMaAG+bir374sORyzM3uulLV14lN5LyykqNk8eEeUlUkB3U0M4FApyaHraT65ihJhDpQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <script>
@@ -66,6 +62,7 @@
             $.ajax({
                 type: method,
                 url: "{{ $contact['send'] ?? route('contact.store') }}",
+
                 data: {
 
                     companyName: $('#companyName').val(),
@@ -75,25 +72,33 @@
                     _token: $('input[type="hidden"]').val(),
                     _method: method
                 },
-                success: function(response) {
-                    Swal.fire({
-                        icon: 'success',
-                        title: '成功',
-                        text: '資料儲存成功'
+                statusCode: {
+                    400: function() {
+                        Swal.fire({
+                            icon: 'error',
+                            title: '失敗',
+                            text: '資料格式錯誤'
 
-                    })
+                        })
+                    },
+                    500:function(){
+                        Swal.fire({
+                            icon: 'error',
+                            title: '失敗',
+                            text: '資料格式錯誤'
 
-                },
-                error: function(xhr) {
-                    console.log(xhr);
-                    Swal.fire({
-                        icon: 'error',
-                        title: '錯誤',
-                        text: '請確認資料格式',
+                        })
+                    },
+                    200: function() {
+                        Swal.fire({
+                            icon: 'success',
+                            title: '成功',
+                            text: '資料儲存成功'
 
-                    })
+                        })
+                    }
+
                 }
-
             });
 
 

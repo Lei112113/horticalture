@@ -5,10 +5,12 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use App\Models\Contact;
+use Exception;
 
 class ContactController extends Controller
 {
     protected $data = [];
+    
 
     public function __construct(NavController $nav)
     {
@@ -43,8 +45,9 @@ class ContactController extends Controller
 
         // 验证请求数据
         $validator = Validator::make($request->all(), [
-            'name' => 'required',
+            'companyName' => 'required',
             'email' => 'required|email',
+            'addrass' => 'required',
             'telphone' => 'required',
         ]);
 
@@ -93,15 +96,23 @@ class ContactController extends Controller
         $contact->addrass = $request->addrass;
         $contact->telphone = $request->telphone;
         $contact->email = $request->email;
-        
-        if ($validator->fails()) {
-            $error = $validator->errors()->first();
-            return response()->json(['status' => false, 'error' => $error], 400);
-        } else {
-            $contact->save();
-            // 返回更新成功的响应
-            return response()->json(['message' => '資料成功儲存']);
-        }
+
+        try {
+            if ($validator->fails()) {
+                // $error = $validator->errors()->first();
+                // return response()->json(['status' => false, 'error' => $error], 400);
+                throw new Exception(implode('<br>', $validator->errors()->all()), 999);
+            } else {
+                $contact->save();
+                // 返回更新成功的响应
+                return response(['status'=>'success','message' => '資料成功儲存'],200);
+            }
+        } catch (Exception $ex) {
+            if ($ex->getCode() == 999) {
+                return response(['status' => 'error', 'error' => $ex->getMessage()], 400);
+            }
+            return response(['status' => 'error', 'error' => 'An error occurred'], 500);
+        };
     }
 
 
