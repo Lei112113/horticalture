@@ -10,7 +10,7 @@ use Exception;
 class ContactController extends Controller
 {
     protected $data = [];
-    
+
 
     public function __construct(NavController $nav)
     {
@@ -45,9 +45,10 @@ class ContactController extends Controller
 
         // 验证请求数据
         $validator = Validator::make($request->all(), [
-            'companyName' => 'required|max:50',
+
+            'companyName' => 'required|max:50|regex:/^[\x{4e00}-\x{9fa5}_a-zA-Z0-9]+$/u',
             'email' => 'required|email',
-            'addrass' => 'required|max:50',
+            'addrass' => 'required|max:50|regex:/^[\x{4e00}-\x{9fa5}_a-zA-Z0-9]+$/u',
             'telphone' => 'required|numeric',
         ]);
 
@@ -56,7 +57,7 @@ class ContactController extends Controller
         $contact->addrass = $request->addrass;
         $contact->telphone = $request->telphone;
         $contact->email = $request->email;
-        $this->checkout($validator->fails(),$contact);
+        $this->checkout($validator->fails(), $contact);
     }
 
     /**
@@ -83,9 +84,10 @@ class ContactController extends Controller
 
         // 验证请求数据
         $validator = Validator::make($request->all(), [
-            'companyName' => 'required|max:50',
+
+            'companyName' => 'required|max:50|regex:/^[\x{4e00}-\x{9fa5}_a-zA-Z0-9]+$/u',
             'email' => 'required|email',
-            'addrass' => 'required|max:50',
+            'addrass' => 'required|max:50|regex:/^[\x{4e00}-\x{9fa5}_a-zA-Z0-9]+$/u',
             'telphone' => 'required|numeric',
         ]);
 
@@ -96,9 +98,7 @@ class ContactController extends Controller
         $contact->addrass = $request->addrass;
         $contact->telphone = $request->telphone;
         $contact->email = $request->email;
-        $this->checkout($validator->fails(),$contact);
-
-       
+        $this->checkout($validator->fails(), $contact);
     }
 
 
@@ -112,7 +112,8 @@ class ContactController extends Controller
     }
 
 
-    private function checkout($validator,$contact){
+    private function checkout($validator, $contact)
+    {
         try {
             if ($validator) {
                 // $error = $validator->errors()->first();
@@ -121,7 +122,7 @@ class ContactController extends Controller
             } else {
                 $contact->save();
                 // 返回更新成功的响应
-                return response(['status'=>'success','message' => '資料成功儲存'],200);
+                return response(['status' => 'success', 'message' => '資料成功儲存'], 200);
             }
         } catch (Exception $ex) {
             if ($ex->getCode() == 999) {
