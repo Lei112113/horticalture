@@ -45,10 +45,10 @@ class ContactController extends Controller
 
         // 验证请求数据
         $validator = Validator::make($request->all(), [
-            'companyName' => 'required',
+            'companyName' => 'required|max:50',
             'email' => 'required|email',
-            'addrass' => 'required',
-            'telphone' => 'required',
+            'addrass' => 'required|max:50',
+            'telphone' => 'required|numeric',
         ]);
 
         $contact = new Contact;
@@ -83,10 +83,10 @@ class ContactController extends Controller
 
         // 验证请求数据
         $validator = Validator::make($request->all(), [
-            'companyName' => 'required',
+            'companyName' => 'required|max:50',
             'email' => 'required|email',
-            'addrass' => 'required',
-            'telphone' => 'required',
+            'addrass' => 'required|max:50',
+            'telphone' => 'required|numeric',
         ]);
 
 

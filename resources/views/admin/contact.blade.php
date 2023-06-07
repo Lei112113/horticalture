@@ -6,7 +6,7 @@
 @extends('layouts.nav')
 
 
-<h2 style="margin:100px auto 10px auto;" class="text-center">聯絡資訊管理</h2>
+<h2 style="margin:30vh auto 10px auto;" class="text-center">聯絡資訊管理</h2>
 <form action="" method="post" class="text-center m-auto" style="width: 75vw">
     @csrf
     <input type="hidden" name="id" value="{{ $contact['id'] ?? '' }}" id="id">
@@ -20,8 +20,9 @@
     </div>
     <div class="mb-1 ">
         <label for="telphone" style="margin-right:34px">電話:</label>
-        <input class="w-50" type="text" name="telphone" id="telphone" maxlength="10" oninput="chk()" value="{{ $contact['telphone'] ?? '' }}">
+        <input class="w-50" type="text" name="telphone" id="telphone" maxlength="10" oninput="chk()" value="{{ $contact['telphone'] ?? '' }}" >
     </div>
+    <div style="font-size:10px;margin-left:300px;color:red" class="w-25 mt-1">*電話最長10字元喔，只能輸入數字</div>
     <div class="mb-1 ">
         <label for="email">電子郵件:</label>
         <input class="w-50" type="email" name="email" id="email" value="{{ $contact['email'] ?? '' }}">
@@ -49,8 +50,7 @@
 
     function stop(event) {
         event.preventDefault();
-        if ($('#companyName').val() == "" || $('#addrass').val == "" || $('#telphone').val() == "" || $('#email')
-            .val() == "") {
+        if ($('#companyName').val() == "" || $('#addrass').val == "" || $('#telphone').val() == "" || $('#email').val() == "") {
             Swal.fire({
                 icon: 'error',
                 title: '錯誤',
