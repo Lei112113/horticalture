@@ -56,7 +56,7 @@ class ContactController extends Controller
         $contact->addrass = $request->addrass;
         $contact->telphone = $request->telphone;
         $contact->email = $request->email;
-        $contact->save();
+        $this->checkout($validator->fails(),$contact);
     }
 
     /**
@@ -96,9 +96,25 @@ class ContactController extends Controller
         $contact->addrass = $request->addrass;
         $contact->telphone = $request->telphone;
         $contact->email = $request->email;
+        $this->checkout($validator->fails(),$contact);
 
+       
+    }
+
+
+
+    /**
+     * Remove the specified resource from storage.
+     */
+    public function destroy(string $id)
+    {
+        //
+    }
+
+
+    private function checkout($validator,$contact){
         try {
-            if ($validator->fails()) {
+            if ($validator) {
                 // $error = $validator->errors()->first();
                 // return response()->json(['status' => false, 'error' => $error], 400);
                 throw new Exception(implode('<br>', $validator->errors()->all()), 999);
@@ -113,15 +129,5 @@ class ContactController extends Controller
             }
             return response(['status' => 'error', 'error' => 'An error occurred'], 500);
         };
-    }
-
-
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
     }
 }
