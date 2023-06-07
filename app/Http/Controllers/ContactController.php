@@ -24,6 +24,7 @@ class ContactController extends Controller
         $olddata = Contact::all();
         if (isset($olddata[0])) {
             $id = $olddata[0]->id;
+            //確認資料庫有沒有資料了，有資料就傳送這個
             $olddata[0]['send'] = route("contact.update", ['contact' => $id]);
             $this->data['contact'] = $olddata[0];
         }

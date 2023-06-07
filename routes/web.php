@@ -5,6 +5,7 @@ use App\Http\Controllers\MainPageController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\OrdersController;
+use App\Http\Controllers\NavController;
 
 /*
 |--------------------------------------------------------------------------

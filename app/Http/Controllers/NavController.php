@@ -3,26 +3,39 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Nav;
+
 
 class NavController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public  $nav = [
+    public  $nav = ['nav' => [
+        'webName' => 'HORTICULTRUE',
         'website' => 'admin',
         'navName' => '管理選單',
-        'index' => ['index', '回到管理首頁'],
-        'contact' => ['contact.index', '聯絡資訊管理'],
-        'orders' => ['orders.index', '商品管理']
-    ];
-    
-    
+        'admin_nav' => [
+            'index' => ['index', '回到管理首頁'],
+            'contact' => ['contact.index', '聯絡資訊管理'],
+            'orders' => ['orders.index', '商品管理']
+        ]
 
+    ]];
+
+    protected $data = [];
 
 
     public function index()
     {
+        $olddata = Nav::all();
+
+        if(isset($olddata[0])){
+            $this->data['navDatas'] = $olddata[0];
+        }
+
+
+        return  view("admin.nav.nav", $this->nav);
     }
 
     /**
@@ -30,7 +43,7 @@ class NavController extends Controller
      */
     public function create()
     {
-        //
+        return  view("admin.nav.create", $this->nav);
     }
 
     /**

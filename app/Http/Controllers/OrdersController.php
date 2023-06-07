@@ -16,14 +16,14 @@ class OrdersController extends NavController
         foreach ($this->nav as $key => $value) {
             $this->data['nav'][$key]= $value;
         }
-        // dd($this->data);
+        
         $olddata = Orders::all();
         if (isset($olddata[0])) {
             $id = $olddata[0]->id;
             $olddata[0]['send'] = route("contact.update", ['contact' => $id]);
             $this->data['contact'] = $olddata[0];
         }
-        return view("admin.contact", $this->data);
+        return view("admin.orders", $this->data);
     }
 
     /**
