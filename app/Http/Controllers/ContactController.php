@@ -7,20 +7,12 @@ use Illuminate\Support\Facades\Validator;
 use App\Models\Contact;
 use Exception;
 
-class ContactController extends Controller
+class ContactController extends NavController
 {
-    protected $data = [];
-
-
-    public function __construct(NavController $nav)
-    {
-        foreach ($nav as $key => $value) {
-            $this->data = [$key => $value];
-        }
-    }
 
     public function index()
     {
+        $this->navfunc($this->nav);
         $olddata = Contact::all();
         if (isset($olddata[0])) {
             $id = $olddata[0]->id;
@@ -58,7 +50,15 @@ class ContactController extends Controller
         $contact->addrass = $request->addrass;
         $contact->telphone = $request->telphone;
         $contact->email = $request->email;
-        $this->checkout($validator->fails(), $contact);
+        $chk = $this->checkout($validator, $contact);
+        $status = 'error';
+        $message = '儲存失敗';
+        if ($chk->getStatusCode() == 200) {
+            $contact->save();
+            $status = 'success';
+            $message = '儲存成功';
+        }
+        return response(['status' => $status, 'message' => $message], $chk->getStatusCode());
     }
 
     /**
@@ -99,7 +99,15 @@ class ContactController extends Controller
         $contact->addrass = $request->addrass;
         $contact->telphone = $request->telphone;
         $contact->email = $request->email;
-        $this->checkout($validator->fails(), $contact);
+        $chk = $this->checkout($validator, $contact);
+        $status = 'error';
+        $message = '儲存失敗';
+        if ($chk->getStatusCode() == 200) {
+            $contact->save();
+            $status = 'success';
+            $message = '儲存成功';
+        }
+        return response(['status' => $status, 'message' => $message], $chk->getStatusCode());
     }
 
 
@@ -110,26 +118,5 @@ class ContactController extends Controller
     public function destroy(string $id)
     {
         //
-    }
-
-
-    private function checkout($validator, $contact)
-    {
-        try {
-            if ($validator) {
-                // $error = $validator->errors()->first();
-                // return response()->json(['status' => false, 'error' => $error], 400);
-                throw new Exception(implode('<br>', $validator->errors()->all()), 999);
-            } else {
-                $contact->save();
-                // 返回更新成功的响应
-                return response(['status' => 'success', 'message' => '資料成功儲存'], 200);
-            }
-        } catch (Exception $ex) {
-            if ($ex->getCode() == 999) {
-                return response(['status' => 'error', 'error' => $ex->getMessage()], 400);
-            }
-            return response(['status' => 'error', 'error' => 'An error occurred'], 500);
-        };
     }
 }

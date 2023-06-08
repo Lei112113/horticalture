@@ -13,9 +13,10 @@
             <div class="offcanvas-body">
                 <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
 
-                    @foreach ($nav['admin_nav'] as $key => $value)
+                    @foreach ($navDatas as $key => $value)
+                   
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ route($value[0]) }}">{{ $value[1] }}</a>
+                            <a class="nav-link" href="{{ route($value['admin_nav_route']) }}">{{ $value['admin_nav_name'] }}</a>
                         </li>
                     @endforeach
 
@@ -38,9 +39,9 @@
     </div>
 </nav>
 <div class="fixed-top text-center" style="margin-top:10vh">
-    @foreach ($nav['admin_nav'] as $key => $value)
+    @foreach ($navDatas as $key => $value)
         <button class="btn btn-primary">
-            <a class="nav-link" href="{{ route($value[0]) }}">{{ $value[1] }}</a>
+            <a class="nav-link" href="{{ route($value['admin_nav_route']) }}">{{ $value['admin_nav_name'] }}</a>
         </button>
     @endforeach
 </div>

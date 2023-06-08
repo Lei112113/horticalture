@@ -73,7 +73,8 @@
                     _method: method
                 },
                 statusCode: {
-                    400: function() {
+                    400: function(res) {
+                        console.log(res);
                         Swal.fire({
                             icon: 'error',
                             title: '失敗',
@@ -81,7 +82,8 @@
 
                         })
                     },
-                    500:function(){
+                    500:function(res){
+                        console.log(res);
                         Swal.fire({
                             icon: 'error',
                             title: '失敗',
@@ -89,7 +91,8 @@
 
                         })
                     },
-                    200: function() {
+                    200: function(res) {
+                        console.log(res);
                         Swal.fire({
                             icon: 'success',
                             title: '成功',

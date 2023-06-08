@@ -17,30 +17,27 @@ class NavController extends Controller
         'webName' => 'HORTICULTRUE',
         'website' => 'admin',
         'navName' => '管理選單',
-        'admin_nav' => [
-            'index' => ['index', '回到管理首頁'],
-            'contact' => ['contact.index', '聯絡資訊管理'],
-            'orders' => ['orders.index', '商品管理']
-        ]
-
     ];
 
     protected $data = [];
 
-
-    public function index()
+    public function navfunc($nav)
     {
         foreach ($this->nav as $key => $value) {
             $this->data['nav'][$key] = $value;
-        }
+        } 
         $olddata = Nav::all();
 
         if (isset($olddata[0])) {
-            $this->data['navDatas'] = $olddata[0];
+            $this->data['navDatas'] = $olddata;
         }
+        return $this->data;
+    }
 
-
-        return  view("admin.nav.nav", $this->data);
+    public function index()
+    {
+        $this->navfunc($this->nav);
+       return  view("admin.nav.nav", $this->data);
     }
 
     /**
@@ -71,15 +68,14 @@ class NavController extends Controller
         $nav->admin_nav_route = $request->admin_nav_route;
 
         $chk = $this->checkout($validator, $nav);
-        
-        if($chk->getStatusCode()==200){
-            $nav->save();
-            $status='success';
-        }else{
-            $status='error';
 
+        if ($chk->getStatusCode() == 200) {
+            $nav->save();
+            $statusCode = 200;
+        } else {
+            $statusCode = $chk->getStatusCode() ;
         }
-        return redirect()->route('nav.index')->with('status')->with($status);
+        return redirect()->route('nav.index')->with('statusCode')->with($statusCode);
     }
 
     /**

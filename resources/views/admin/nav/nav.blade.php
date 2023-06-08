@@ -13,15 +13,15 @@
         </tr>
         @isset($navDatas)
         @php
-        dd($navDatas);
+        // dd($navDatas);
         @endphp
             @foreach ($navDatas as $navData)
             <tr style="border: 1px solid gray">
-                <td></td>
-                <td></td>
+                <td>{{$navData['admin_nav_name']}}</td>
+                <td>{{$navData['admin_nav_route']}}</td>
                 <td>
-                    <button>操作</button>
-                    <button>刪除</button>
+                    <button class="btn btn-sm btn-primary">操作</button>
+                    <button class="btn btn-sm btn-danger">刪除</button>
                 </td>
             </tr>
             @endforeach
