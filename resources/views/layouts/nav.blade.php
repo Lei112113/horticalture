@@ -16,7 +16,7 @@
                     @foreach ($navDatas as $key => $value)
                    
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ route($value['admin_nav_route']) }}">{{ $value['admin_nav_name'] }}</a>
+                            <a class="nav-link" href="{{ !empty($value['admin_nav_route']) ?route($value['admin_nav_route']) : null}}">{{ $value['admin_nav_name'] }}</a>
                         </li>
                     @endforeach
 
@@ -41,7 +41,7 @@
 <div class="fixed-top text-center" style="margin-top:10vh">
     @foreach ($navDatas as $key => $value)
         <button class="btn btn-primary">
-            <a class="nav-link" href="{{ route($value['admin_nav_route']) }}">{{ $value['admin_nav_name'] }}</a>
+            <a class="nav-link" href="{{ !empty($value['admin_nav_route']) ? route($value['admin_nav_route']) : null}}">{{ $value['admin_nav_name'] }}</a>
         </button>
     @endforeach
 </div>

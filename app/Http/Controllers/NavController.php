@@ -25,7 +25,7 @@ class NavController extends Controller
     {
         foreach ($this->nav as $key => $value) {
             $this->data['nav'][$key] = $value;
-        } 
+        }
         $olddata = Nav::all();
 
         if (isset($olddata[0])) {
@@ -37,7 +37,7 @@ class NavController extends Controller
     public function index()
     {
         $this->navfunc($this->nav);
-       return  view("admin.nav.nav", $this->data);
+        return  view("admin.nav.nav", $this->data);
     }
 
     /**
@@ -53,7 +53,7 @@ class NavController extends Controller
      */
     public function store(Request $request)
     {
-        // 验证请求数据
+        // 验证條件
         $validator = Validator::make($request->all(), [
 
             'admin_nav_key' => 'required|max:50|regex:/[a-zA-Z]+$/u',
@@ -61,20 +61,29 @@ class NavController extends Controller
             'admin_nav_route' => 'required|max:50|regex:/[a-zA-Z.]+$/u',
 
         ]);
+        $is_active_url = Validator::make(['admin_nav_route'=>$request->admin_nav_route], [
+            'admin_nav_route'=>'url'
+        ]);
+
 
         $nav = new Nav;
         $nav->admin_nav_key = $request->admin_nav_key;
         $nav->admin_nav_name = $request->admin_nav_name;
         $nav->admin_nav_route = $request->admin_nav_route;
 
-        $chk = $this->checkout($validator, $nav);
 
-        if ($chk->getStatusCode() == 200) {
+        //驗證
+        $chk = $this->checkout($validator, $nav);
+        if ($is_active_url->passes() && $chk->getStatusCode() == 200) {
             $nav->save();
-            $statusCode = 200;
-        } else {
-            $statusCode = $chk->getStatusCode() ;
+        } else if (!$is_active_url->passes()) {
+            $nav->admin_nav_route = '';
+            $nav->save();
         }
+        $statusCode = $chk->getStatusCode();
+
+
+
         return redirect()->route('nav.index')->with('statusCode')->with($statusCode);
     }
 
@@ -107,8 +116,10 @@ class NavController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        
+       
     }
+
     public function checkout($validator, $value)
     {
         try {
