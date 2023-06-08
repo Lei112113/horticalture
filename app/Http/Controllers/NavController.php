@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
+use Exception;
 use App\Models\Nav;
 
 
@@ -11,7 +13,7 @@ class NavController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public  $nav = ['nav' => [
+    public  $nav =  [
         'webName' => 'HORTICULTRUE',
         'website' => 'admin',
         'navName' => '管理選單',
@@ -21,21 +23,24 @@ class NavController extends Controller
             'orders' => ['orders.index', '商品管理']
         ]
 
-    ]];
+    ];
 
     protected $data = [];
 
 
     public function index()
     {
+        foreach ($this->nav as $key => $value) {
+            $this->data['nav'][$key] = $value;
+        }
         $olddata = Nav::all();
 
-        if(isset($olddata[0])){
+        if (isset($olddata[0])) {
             $this->data['navDatas'] = $olddata[0];
         }
 
 
-        return  view("admin.nav.nav", $this->nav);
+        return  view("admin.nav.nav", $this->data);
     }
 
     /**
@@ -51,7 +56,30 @@ class NavController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        // 验证请求数据
+        $validator = Validator::make($request->all(), [
+
+            'admin_nav_key' => 'required|max:50|regex:/[a-zA-Z]+$/u',
+            'admin_nav_name' => 'required|max:50|regex:/^[\x{4e00}-\x{9fa5}_a-zA-Z0-9]+$/u',
+            'admin_nav_route' => 'required|max:50|regex:/[a-zA-Z.]+$/u',
+
+        ]);
+
+        $nav = new Nav;
+        $nav->admin_nav_key = $request->admin_nav_key;
+        $nav->admin_nav_name = $request->admin_nav_name;
+        $nav->admin_nav_route = $request->admin_nav_route;
+
+        $chk = $this->checkout($validator, $nav);
+        
+        if($chk->getStatusCode()==200){
+            $nav->save();
+            $status='success';
+        }else{
+            $status='error';
+
+        }
+        return redirect()->route('nav.index')->with('status')->with($status);
     }
 
     /**
@@ -84,5 +112,23 @@ class NavController extends Controller
     public function destroy(string $id)
     {
         //
+    }
+    public function checkout($validator, $value)
+    {
+        try {
+            if ($validator->fails()) {
+
+                throw new Exception(implode('<br>', $validator->errors()->all()), 999);
+            } else {
+
+                // 返回更新成功的响应
+                return response(['status' => 'success', 'message' => '資料成功儲存'], 200);
+            }
+        } catch (Exception $ex) {
+            if ($ex->getCode() == 999) {
+                return response(['status' => 'error', 'error' => $ex->getMessage()], 400);
+            }
+            return response(['status' => 'error', 'error' => 'An error occurred'], 500);
+        };
     }
 }

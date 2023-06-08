@@ -1,14 +1,33 @@
-<div style="background-color:rgba(0,0,0,0.2);position:absolute" class="w-100 vh-100" >
-    <form action="" method="post" style="margin:40vh 45vw;">
-        <div>
-            <label for="admin_nav_name">連結名稱:<input type="text" name="admin_nav_name" id="admin_nav_name"></label>
-        </div>
-        <div>
-            <label for="admin_nav_route">連結:<input type="text" name="admin_nav_route" id="admin_nav_route"></label>
-        </div>
-        <div class="mt-3 float-end me-2">
-            <input type="reset" value="重整"></label>
-            <input type="submit" value="新增"></label>
-        </div>
-    </form>
+<div style="padding:224px" class="w-100 vh-100 ">
+    <div style="width:300px;margin:0 auto;" class="">
+       <h2 >管理連結新增</h2>
+    <form action="{{route('nav.store')}}" method="post"  class="">
+        @csrf
+        <table >
+            <tr>
+                <td><label for="admin_nav_key">應用頁面名稱<br>(請輸入英文)</label></td>
+                <td><input type="text" name="admin_nav_key" id="admin_nav_key"></td>
+            </tr>
+            <tr>
+                <td><label for="admin_nav_name">連結名稱:</label></td>
+                <td><input type="text" name="admin_nav_name" id="admin_nav_name"></td>
+            </tr>
+            <tr>
+                <td> <label for="admin_nav_route">短連結:</label></td>
+                <td><input type="text" name="admin_nav_route" id="admin_nav_route"></td>
+            </tr>
+            <tr>
+                <td></td>
+                <td class="text-end">
+                    <input type="submit" value="新增" class="btn btn-primary btn-sm">
+                    <input type="reset" value="重整" class="btn btn-warning btn-sm">
+                    <input type="button" value="回上一頁" onclick="history.go(-1)" class="btn btn-secondary btn-sm">
+                </td>
+            </tr>
+        </table>
+
+
+    </form>  
+    </div>
+   
 </div>

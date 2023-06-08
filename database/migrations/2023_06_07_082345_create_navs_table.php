@@ -13,8 +13,9 @@ return new class extends Migration
     {
         Schema::create('navs', function (Blueprint $table) {
             $table->id();
-            $table->text('admin_nav_route');
+            $table->text('admin_nav_key');
             $table->text('admin_nav_name');
+            $table->text('admin_nav_route');
             $table->timestamps();
         });
     }

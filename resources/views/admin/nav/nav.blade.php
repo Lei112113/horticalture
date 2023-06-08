@@ -12,10 +12,13 @@
             </td>
         </tr>
         @isset($navDatas)
+        @php
+        dd($navDatas);
+        @endphp
             @foreach ($navDatas as $navData)
             <tr style="border: 1px solid gray">
-                <td>{{$navData['name']}}</td>
-                <td>{{$navData['route']}}</td>
+                <td></td>
+                <td></td>
                 <td>
                     <button>操作</button>
                     <button>刪除</button>
