@@ -5,6 +5,11 @@ use App\Http\Controllers\MainPageController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\OrdersController;
+
+
+
+
+use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\NavController;
 
 /*
@@ -22,7 +27,7 @@ use App\Http\Controllers\NavController;
  
 Route::resource('/', MainPageController::class);
 
-Route::prefix('admin')->group(function () {
+Route::prefix('admin')->group(function () {Route::resource('employee', EmployeeController::class);Route::resource('fsdaffasdfas', FsdaffasdfasController::class);Route::resource('fsdaffasdfas', FsdaffasdfasController::class);Route::resource('fsdaffasdfas', FsdaffasdfasController::class);Route::resource('employee', EmployeeController::class);Route::resource('employee', EmployeeController::class);Route::resource('employee', EmployeeController::class);Route::resource('employee', EmployeeController::class);
  
     Route::resource('contact', ContactController::class);
     Route::resource('nav', NavController::class);

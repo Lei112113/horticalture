@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Exception;
 use App\Models\Nav;
+use Illuminate\Support\Facades\Artisan;
 
 
 class NavController extends Controller
@@ -61,8 +62,8 @@ class NavController extends Controller
             'admin_nav_route' => 'required|max:50|regex:/[a-zA-Z.]+$/u',
 
         ]);
-        $is_active_url = Validator::make(['admin_nav_route'=>$request->admin_nav_route], [
-            'admin_nav_route'=>'url'
+        $is_active_url = Validator::make(['admin_nav_route' => $request->admin_nav_route], [
+            'admin_nav_route' => 'url'
         ]);
 
 
@@ -77,7 +78,7 @@ class NavController extends Controller
         if ($is_active_url->passes() && $chk->getStatusCode() == 200) {
             $nav->save();
         } else if (!$is_active_url->passes()) {
-            $nav->admin_nav_route = '';
+            $this->createNavController($nav->admin_nav_key);
             $nav->save();
         }
         $statusCode = $chk->getStatusCode();
@@ -116,8 +117,6 @@ class NavController extends Controller
      */
     public function destroy(string $id)
     {
-        
-       
     }
 
     public function checkout($validator, $value)
@@ -137,5 +136,60 @@ class NavController extends Controller
             }
             return response(['status' => 'error', 'error' => 'An error occurred'], 500);
         };
+    }
+
+
+    public function createNavController($formName)
+    {
+        $controllerName = ucfirst($formName) . 'Controller';
+
+        //添加到web route
+        $routeCode = "Route::resource('$formName', $controllerName::class);";
+        $webFilePath = base_path('routes/web.php');
+        $existingRoutes = file_get_contents($webFilePath);
+
+        // 获取新的路由代码
+        $newRoutes = "Route::resource('$formName', $controllerName::class);";
+
+        // 在现有路由组中查找 'prefix' => 'admin' 的位置
+        $prefixPosition = strpos($existingRoutes, "Route::prefix('admin')->group(function () {");
+
+        if ($prefixPosition !== false) {
+            // 在 'prefix' => 'admin' 之后插入新的路由代码
+            $insertPosition = $prefixPosition + strlen("Route::prefix('admin')->group(function () {");
+            $updatedRoutes = substr_replace($existingRoutes, $newRoutes, $insertPosition, 0);
+
+            // 将更新后的路由写入文件
+            file_put_contents($webFilePath, $updatedRoutes);
+        } else {
+            // 如果找不到 'prefix' => 'admin'，则输出错误消息或执行其他处理逻辑
+            echo "无法找到 'prefix' => 'admin' 路由组";
+        }
+
+
+
+
+        //web.php新增use
+        $useStatement = "use App\Http\Controllers\\$controllerName;";
+        $webCode = file_get_contents($webFilePath);
+        // 检查是否已存在相同的 use 声明
+        if (strpos($webCode, $useStatement) === false) {
+            // 查找最后一个 use 声明的位置
+            $lastUsePosition = strrpos($webCode, 'use');
+
+            // 插入 use 声明到最后一个 use 声明的后面
+            $updatedWebCode = substr($webCode, 0, $lastUsePosition) . $useStatement . "\n" . substr($webCode, $lastUsePosition);
+           
+            // 将更新后的内容写回文件
+            file_put_contents($webFilePath, $updatedWebCode);
+        }
+
+
+
+        //創造controller
+        Artisan::call('make:controller', [
+            'name' => $controllerName,
+            '--resource' => true,
+        ]);
     }
 }
