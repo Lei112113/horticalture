@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Validator;
 use Exception;
 use App\Models\Nav;
 use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\File;
 
 
 class NavController extends Controller
@@ -117,6 +118,21 @@ class NavController extends Controller
      */
     public function destroy(string $id)
     {
+        $delthing=Nav::find($id);
+        $delname=ucfirst($delthing->admin_nav_key)."Controller" ;
+        $controllerPath = app_path("Http/Controllers/$delname.php");
+        $routeFilePath = base_path('routes/web.php');
+
+        if (File::exists($controllerPath)) {
+            File::delete($controllerPath);
+            $delthing->delete();
+            $routeFileContent = file_get_contents($routeFilePath);
+            echo "Route::resource('$delthing->admin_nav_key', $delname::class);";
+            $routeFileContent = str_replace("Route::resource('$delthing->admin_nav_key',$delname::class);", '', $routeFileContent);
+            file_put_contents($routeFilePath, $routeFileContent);
+        }
+        
+
     }
 
     public function checkout($validator, $value)
@@ -149,14 +165,14 @@ class NavController extends Controller
         $existingRoutes = file_get_contents($webFilePath);
 
         // 获取新的路由代码
-        $newRoutes = "Route::resource('$formName', $controllerName::class);";
+        $newRoutes = "Route::resource('$formName', $controllerName::class); ";
 
         // 在现有路由组中查找 'prefix' => 'admin' 的位置
         $prefixPosition = strpos($existingRoutes, "Route::prefix('admin')->group(function () {");
 
         if ($prefixPosition !== false) {
             // 在 'prefix' => 'admin' 之后插入新的路由代码
-            $insertPosition = $prefixPosition + strlen("Route::prefix('admin')->group(function () {");
+            $insertPosition = $prefixPosition + strlen("Route::prefix('admin')->group(function () { ");
             $updatedRoutes = substr_replace($existingRoutes, $newRoutes, $insertPosition, 0);
 
             // 将更新后的路由写入文件
