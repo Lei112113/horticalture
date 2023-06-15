@@ -9,6 +9,7 @@ use App\Models\Nav;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\File;
 
+use function PHPSTORM_META\type;
 
 class NavController extends Controller
 {
@@ -126,6 +127,7 @@ class NavController extends Controller
 
         $nav = Nav::find($id);
         
+        
         $input=$request->except('_token', '_method', 'admin_nav_key', 'id');
         $nav->admin_nav_name=$input['admin_nav_name'];
         $nav->admin_nav_route=$input['admin_nav_route'];
@@ -151,12 +153,15 @@ class NavController extends Controller
     public function destroy(string $id)
     {
         $delthing = Nav::find($id);
+
+        dump($delthing->id);
         $delname = ucfirst($delthing->admin_nav_key) . "Controller";
         $controllerPath = app_path("Http/Controllers/$delname.php");
         $routeFilePath = base_path('routes/web.php');
-
+        
         if (File::exists($controllerPath)) {
             File::delete($controllerPath);
+           
             $delthing->delete();
             $routeFileContent = file_get_contents($routeFilePath);
             echo "Route::resource('$delthing->admin_nav_key', $delname::class);";
