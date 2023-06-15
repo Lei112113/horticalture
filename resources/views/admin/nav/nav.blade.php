@@ -21,7 +21,7 @@
                         <button
                             class="btn btn-sm btn-primary"onclick="location.href='{{ route('nav.edit', ['nav' => $navData['id']]) }}'">操作
                         </button>
-                        <button class="btn btn-sm btn-danger" onclick="nav_delete()">
+                        <button class="btn btn-sm btn-danger" onclick="nav_delete({{$navData['id']}})">
                             刪除
                         </button>
                         @csrf
@@ -39,7 +39,7 @@
 
 
 <script>
-    function nav_delete() {
+    function nav_delete(id) {
         Swal.fire({
             title: '確定刪除嗎',
             text: "你確定要刪除這底資料嗎？刪除後無法恢復喔",
@@ -52,9 +52,10 @@
             if (result.isConfirmed) {
                 let data = {
                     _token: $("input[name='_token']").val(),
+                    id:id
 
                 }
-
+                console.log(data);
                 $.ajax({
                     type: "delete",
                     url: "{{ route('nav.destroy', ['nav' => $navData['id']]) }}",

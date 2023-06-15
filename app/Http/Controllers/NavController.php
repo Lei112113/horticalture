@@ -102,7 +102,8 @@ class NavController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $data = Nav::find($id);
+        return view('admin.nav.edit', ['data' => $data]);
     }
 
     /**
@@ -110,7 +111,38 @@ class NavController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        // 验证條件
+        $validator = Validator::make($request->all(), [
+
+            'admin_nav_key' => 'required|max:50|regex:/[a-zA-Z]+$/u',
+            'admin_nav_name' => 'required|max:50|regex:/^[\x{4e00}-\x{9fa5}_a-zA-Z0-9]+$/u',
+            'admin_nav_route' => 'required|max:50|regex:/[a-zA-Z.]+$/u',
+
+        ]);
+        $is_active_url = Validator::make(['admin_nav_route' => $request->admin_nav_route], [
+            'admin_nav_route' => 'url'
+        ]);
+
+
+        $nav = Nav::find($id);
+        
+        $input=$request->except('_token', '_method', 'admin_nav_key', 'id');
+        $nav->admin_nav_name=$input['admin_nav_name'];
+        $nav->admin_nav_route=$input['admin_nav_route'];
+
+
+        //驗證
+        $chk = $this->checkout($validator, $nav);
+        if ($is_active_url->passes() && $chk->getStatusCode() == 200) {
+            $nav->save();
+        } else if (!$is_active_url->passes()) {
+            $nav->save();
+        }
+        $statusCode = $chk->getStatusCode();
+
+
+
+        return redirect()->route('nav.index')->with('statusCode')->with($statusCode);
     }
 
     /**
@@ -118,8 +150,8 @@ class NavController extends Controller
      */
     public function destroy(string $id)
     {
-        $delthing=Nav::find($id);
-        $delname=ucfirst($delthing->admin_nav_key)."Controller" ;
+        $delthing = Nav::find($id);
+        $delname = ucfirst($delthing->admin_nav_key) . "Controller";
         $controllerPath = app_path("Http/Controllers/$delname.php");
         $routeFilePath = base_path('routes/web.php');
 
@@ -131,8 +163,6 @@ class NavController extends Controller
             $routeFileContent = str_replace("Route::resource('$delthing->admin_nav_key',$delname::class);", '', $routeFileContent);
             file_put_contents($routeFilePath, $routeFileContent);
         }
-        
-
     }
 
     public function checkout($validator, $value)
@@ -195,7 +225,7 @@ class NavController extends Controller
 
             // 插入 use 声明到最后一个 use 声明的后面
             $updatedWebCode = substr($webCode, 0, $lastUsePosition) . $useStatement . "\n" . substr($webCode, $lastUsePosition);
-           
+
             // 将更新后的内容写回文件
             file_put_contents($webFilePath, $updatedWebCode);
         }
