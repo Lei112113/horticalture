@@ -35,25 +35,45 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.4/jquery.min.js"
     integrity="sha512-pumBsjNRGGqkPzKHndZMaAG+bir374sORyzM3uulLV14lN5LyykqNk8eEeUlUkB3U0M4FApyaHraT65ihJhDpQ=="
     crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 
 <script>
     function nav_delete() {
-        
-        let data ={
-            _token: $("input[name='_token']").val(),
-           
-        }
-        
-        $.ajax({
-            type: "delete",
-            url: "{{route('nav.destroy',['nav'=>$navData['id']])}}",
-            data: data,
-           
-            success: function (response) {
-                location.reload();
-                
+        Swal.fire({
+            title: '確定刪除嗎',
+            text: "你確定要刪除這底資料嗎？刪除後無法恢復喔",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: '確定刪除'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                let data = {
+                    _token: $("input[name='_token']").val(),
+
+                }
+
+                $.ajax({
+                    type: "delete",
+                    url: "{{ route('nav.destroy', ['nav' => $navData['id']]) }}",
+                    data: data,
+
+                    success: function(response) {
+                        location.reload();
+
+                    }
+                });
+                Swal.fire(
+                    'Deleted!',
+                    '已經刪除',
+                    'success'
+                )
             }
-        });
-   
+        })
+
+
+
     }
 </script>
