@@ -200,7 +200,7 @@ class NavController extends Controller
         $existingRoutes = file_get_contents($webFilePath);
 
         // 获取新的路由代码
-        $newRoutes = "Route::resource('$formName', $controllerName::class); ";
+        $newRoutes = "Route::resource('$formName', $controllerName::class); \n";
 
         // 在现有路由组中查找 'prefix' => 'admin' 的位置
         $prefixPosition = strpos($existingRoutes, "Route::prefix('admin')->group(function () {");

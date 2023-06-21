@@ -21,7 +21,8 @@
                         <button
                             class="btn btn-sm btn-primary"onclick="location.href='{{ route('nav.edit', ['nav' => $navData['id']]) }}'">操作
                         </button>
-                        <button class="btn btn-sm btn-danger" onclick="nav_delete($(this).data('url'))" data-url="{{ route('nav.destroy', ['nav' => $navData['id']])}}">
+                        <button class="btn btn-sm btn-danger" onclick="nav_delete($(this).data('url'))"
+                            data-url="{{ route('nav.destroy', ['nav' => $navData['id']]) }}">
                             刪除
                         </button>
                         @csrf
@@ -40,7 +41,7 @@
 
 <script>
     function nav_delete(url) {
-       
+
         console.log(url);
         Swal.fire({
             title: '確定刪除嗎',
@@ -52,23 +53,17 @@
             confirmButtonText: '確定刪除'
         }).then((result) => {
             if (result.isConfirmed) {
-               
-                
+
                 let data = {
                     _token: $("input[name='_token']").val(),
-                   
-
                 }
-                
+
                 $.ajax({
                     type: "delete",
                     url: url,
                     data: data,
-
                     success: function(response) {
                         location.reload();
-                        
-
                     }
                 });
                 Swal.fire(
@@ -78,8 +73,5 @@
                 )
             }
         })
-
-
-
     }
 </script>

@@ -26,7 +26,9 @@ use App\Http\Controllers\NavController;
 Route::resource('/', MainPageController::class);
 
 Route::prefix('admin')->group(function () {
-Route::resource('host', HostController::class); Route::resource('employee', EmployeeController::class); Route::resource('host', HostController::class); 
+
+
+
 
     Route::resource('contact', ContactController::class);
     Route::resource('nav', NavController::class);
