@@ -17,6 +17,7 @@
                 <tr style="border: 1px solid gray">
                     <td>{{ $navData['admin_nav_name'] }}</td>
                     <td>{{ $navData['admin_nav_route'] }}</td>
+                    <td>{{ ($navData['admin_nav']==0)?'深層管理':'一般管理' }}</td>
                     <td>
                         <button
                             class="btn btn-sm btn-primary"onclick="location.href='{{ route('nav.edit', ['nav' => $navData['id']]) }}'">操作

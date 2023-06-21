@@ -15,15 +15,13 @@ class AdminController extends Controller
 
     public function __construct(NavController $nav)
     {
-        foreach ($nav as $key => $value) {
-            $this->data= [$key => $value];
-        }
+
     }
 
     public function index()
     {
- 
-        return view("admin.contact", $this->data);
+
+        return view("admin.main", $this->data);
     }
 
 

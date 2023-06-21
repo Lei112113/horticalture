@@ -1,3 +1,1 @@
-@extends('layouts.nav')
-
-  
+<div>555</div>

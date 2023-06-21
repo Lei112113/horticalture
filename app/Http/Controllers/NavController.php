@@ -73,6 +73,7 @@ class NavController extends Controller
         $nav->admin_nav_key = $request->admin_nav_key;
         $nav->admin_nav_name = $request->admin_nav_name;
         $nav->admin_nav_route = $request->admin_nav_route;
+        $nav->admin_nav = $request->admin_nav;
 
 
         //驗證
@@ -126,11 +127,12 @@ class NavController extends Controller
 
 
         $nav = Nav::find($id);
-        
-        
+
+
         $input=$request->except('_token', '_method', 'admin_nav_key', 'id');
         $nav->admin_nav_name=$input['admin_nav_name'];
         $nav->admin_nav_route=$input['admin_nav_route'];
+        $nav->admin_nav = $input['admin_nav'];
 
 
         //驗證
@@ -158,10 +160,10 @@ class NavController extends Controller
         $delname = ucfirst($delthing->admin_nav_key) . "Controller";
         $controllerPath = app_path("Http/Controllers/$delname.php");
         $routeFilePath = base_path('routes/web.php');
-        
+
         if (File::exists($controllerPath)) {
             File::delete($controllerPath);
-           
+
             $delthing->delete();
             $routeFileContent = file_get_contents($routeFilePath);
             echo "Route::resource('$delthing->admin_nav_key', $delname::class);";

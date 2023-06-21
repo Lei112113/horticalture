@@ -13,26 +13,45 @@
             <div class="offcanvas-body">
                 <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
 
-                    @foreach ($navDatas as $key => $value)
-                   
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ !empty($value['admin_nav_route']) ?route($value['admin_nav_route']) : null}}">{{ $value['admin_nav_name'] }}</a>
-                        </li>
-                    @endforeach
-
-
+                    <li class="nav-item">
+                        <a class="nav-link"
+                            href="{{ route($navDatas[0]['admin_nav_route']) }}">{{ $navDatas[0]['admin_nav_name'] }}</a>
+                    </li>
 
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
                             aria-expanded="false">
-                            Dropdown
+                            深層管理
                         </a>
                         <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="#">Action</a></li>
-                            <li><a class="dropdown-item" href="#">Another action</a></li>
-                            <li><a class="dropdown-item" href="#">Something else here</a></li>
+                            @foreach ($navDatas as $key => $value)
+                                @if ($value['admin_nav_route'] != 'index' && $value['admin_nav'] == 0)
+                                    <li class="nav-item">
+                                        <a class="nav-link"
+                                            href="{{ !empty($value['admin_nav_route']) ? route($value['admin_nav_route']) : null }}">{{ $value['admin_nav_name'] }}</a>
+                                    </li>
+                                @endif
+                            @endforeach
                         </ul>
                     </li>
+
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+                            aria-expanded="false">
+                            一般管理
+                        </a>
+                        <ul class="dropdown-menu">
+                            @foreach ($navDatas as $key => $value)
+                                @if ($value['admin_nav'] == 1)
+                                    <li class="nav-item">
+                                        <a class="nav-link"
+                                            href="{{ !empty($value['admin_nav_route']) ? route($value['admin_nav_route']) : null }}">{{ $value['admin_nav_name'] }}</a>
+                                    </li>
+                                @endif
+                            @endforeach
+                        </ul>
+                    </li>
+                    
                 </ul>
             </div>
         </div>
@@ -41,7 +60,8 @@
 <div class="fixed-top text-center" style="margin-top:10vh">
     @foreach ($navDatas as $key => $value)
         <button class="btn btn-primary">
-            <a class="nav-link" href="{{ !empty($value['admin_nav_route']) ? route($value['admin_nav_route']) : null}}">{{ $value['admin_nav_name'] }}</a>
+            <a class="nav-link"
+                href="{{ !empty($value['admin_nav_route']) ? route($value['admin_nav_route']) : null }}">{{ $value['admin_nav_name'] }}</a>
         </button>
     @endforeach
 </div>
